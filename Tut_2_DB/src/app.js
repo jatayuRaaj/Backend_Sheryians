@@ -1,5 +1,6 @@
 const express = require('express');
 const noteModel = require("../models/note.model");
+const mobileModel = require('../models/mobile.model');
 
 
 const app = express();
@@ -16,6 +17,18 @@ app.post("/notes", async (req, res)=>{
     })
 })
 
+app.post("./mobile",async (req, res)=>{
+    const data = req.body
+    await mobileModel.create({
+        model : data.model,
+        brand : data.brand,
+        battery : data.battery
+    })
+
+    res.status(200).json({
+        message : "mobile fetched successfully"
+    })
+})
 app.get("/notes", async (req, res)=>{
     // const data = res.body;
     const notes = await noteModel.find()
