@@ -1,66 +1,28 @@
-# ======================
-# Environment variables
-# ======================
+# Env
 .env
 .env.*
 !.env.example
 
-# ======================
-# Node dependencies
-# ======================
-node_modules/
+# Node
+**/node_modules/
+
 npm-debug.log*
-yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# ======================
-# Build outputs
-# ======================
+# Builds
 dist/
 build/
 out/
 
-# React build
-client/build/
-
-# ======================
 # Logs
-# ======================
 logs/
 *.log
 
-# ======================
-# MongoDB
-# ======================
-data/
-*.mongodb
-
-# ======================
-# Coverage / Testing
-# ======================
-coverage/
-.nyc_output/
-
-# ======================
-# OS files
-# ======================
+# OS
 .DS_Store
 Thumbs.db
-Desktop.ini
 
-# ======================
-# IDE / Editor
-# ======================
+# IDE
 .vscode/
 .idea/
-*.swp
-*.swo
-*.swn
-
-# ======================
-# Misc
-# ======================
-.cache/
-.tmp/
-*.pid
