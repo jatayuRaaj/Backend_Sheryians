@@ -13,21 +13,39 @@ app.get("/home", (req, res) => {
 })
 
 app.post("/create-post", upload.single('image'), async (req, res) => {
-    console.log(req.body);
-    // console.log(req.file);
+
     const result = await uploadFile(req.file.buffer);
 
-    // console.log(result);
     const post = await postModel.create({
-        image : result.url,
-        caption :  req.body.caption
+        image_link : result.url,
+        caption: req.body.caption
     })
 
     return res.status(201).json({
         message: "posted successfully",
-        result : post
+        result: post,
+        link: result.image
     })
 })
 
+app.get("/posts", async (req, res) => {
+    const posts = await postModel.find();
+    res.status(200).json({
+        message: "posts fetched successfully",
+        posts: posts,
+        link : posts.image
+    })
+ 
+})
 
+app.delete("/delete/:id", async (req, res)=>{
+    const id = req.params.id;
+    await postModel.findOneAndDelete({
+        _id : id 
+    })
+    res.status(200).json({
+        message : "post deleted successfully.",
+        deleted_id  : id
+    })
+})
 module.exports = app

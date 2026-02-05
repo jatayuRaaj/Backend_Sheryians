@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 
 const mobileSchema = new mongoose.Schema({
     model: { type: String, required: true },
-    branch: { type: String },
+    brand: { type: String },
     battery: { type: Number }
 })
 
-const mobileModel = mongoose.model("note", mobileModel);
+const mobileModel = mongoose.model("mobile", mobileSchema);
 
 module.exports = mobileModel
