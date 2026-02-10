@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const musicSchema = new mongoose.Schema({
     uri : {
         type : String,
-        reruired : true
+        required : true
     },
     title :{
         type : String,

@@ -5,7 +5,7 @@ const albumSchema = mongoose.Schema({
         type : String,
         required : true
     },
-    muscis : {
+    musics : {
         type : mongoose.Schema.Types.ObjectId,
         ref : "music"
     },

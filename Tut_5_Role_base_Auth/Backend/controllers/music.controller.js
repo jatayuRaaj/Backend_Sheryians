@@ -13,7 +13,7 @@ async function createMusic(req, res) {
         const music = await musicModel.create({
             uri: result.url,
             title,
-            artist: req.user.id
+            artist: req.user.id     // we can use req.user because in middleware we have already set that req.user = decoded 
         })
         res.status(201).json({
             message: "Music created successfully",
@@ -35,7 +35,7 @@ async function createAlbum(req, res) {
         const { title, musicIds } = req.body
         const album = await albumModel.create({
             title,
-            music: musicIds,
+            musics: musicIds,
             artist: req.user.id
         })
         res.status(201).json({
@@ -54,7 +54,7 @@ async function createAlbum(req, res) {
 
 async function getAllMusics(req, res) {
     try {
-        const musics = await musicModel.find().populate("artist");
+        const musics = await musicModel.find().limit(2).populate("artist", "username email -_id");
         res.status(200).json({
             message: "musics fetched successfully",
             musics: musics
@@ -64,4 +64,19 @@ async function getAllMusics(req, res) {
     }
 }
 
-module.exports = { createMusic, createAlbum, getAllMusics };
+async function getAllAlbums(req, res) {
+    try {
+        const albums = await albumModel.find().populate("artist", "email -_id").populate("musics", "title artish -_id");
+        res.status(201).json({
+            message: "albums fetched successfully",
+            albums : albums
+        })
+    } catch (error) {
+        res.status(400).json({
+            message : error.message,
+        })
+    }
+}
+
+
+module.exports = { createMusic, createAlbum, getAllMusics, getAllAlbums };

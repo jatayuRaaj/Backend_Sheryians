@@ -61,21 +61,26 @@ async function loginUser(req, res) {
             role: user.role
         }, process.env.JWT_SECRET_KEY)
         res.cookie("token", token);
-        res.status(200).json({ 
+        res.status(200).json({
             message: "user logged in successfully",
-            user : {
-                username : user.username,
-                emial : user.email ,
-                role : user.role
+            user: {
+                username: user.username,
+                emial: user.email,
+                role: user.role
             }
         });
 
     } catch (error) {
         console.log(error);
         res.status(400).json({
-            message : error.message
+            message: error.message
         })
     }
 }
 
-module.exports = { registerUser , loginUser}
+async function logoutUser(req, res) {
+    res.clearCookie("token");
+    res.status(200).json({ message: "logged out Successfully" });
+}
+
+module.exports = { registerUser, loginUser, logoutUser }
