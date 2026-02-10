@@ -5,11 +5,7 @@ const { uploadFile } = require('../services/storage.service');
 require('dotenv').config();
 
 async function createMusic(req, res) {
-    const token = req.cookies.token;
-    if (!token) return res.status(401).json({ message: "unauthorized at first " });
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-        if (decoded.role !== "artist") return res.status(403).json({ message: "you dont access to create music" })
         const { title } = req.body;
         const file = req.file;
         const result = await uploadFile(file.buffer.toString('base64'));
@@ -17,7 +13,7 @@ async function createMusic(req, res) {
         const music = await musicModel.create({
             uri: result.url,
             title,
-            artist: decoded.id
+            artist: req.user.id
         })
         res.status(201).json({
             message: "Music created successfully",
@@ -35,16 +31,12 @@ async function createMusic(req, res) {
 }
 
 async function createAlbum(req, res) {
-    const token = req.cookies.token;
-    if (!token) return res.status(401).json({ message: "unauthorised" });
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-        if (decoded.role !== "artist") return res.status(403).json({ message: "U dont have access to create an album" });
         const { title, musicIds } = req.body
         const album = await albumModel.create({
             title,
             music: musicIds,
-            artist: decoded.id
+            artist: req.user.id
         })
         res.status(201).json({
             message: "Album created successfully",
@@ -60,4 +52,16 @@ async function createAlbum(req, res) {
     }
 }
 
-module.exports = { createMusic, createAlbum };
+async function getAllMusics(req, res) {
+    try {
+        const musics = await musicModel.find().populate("artist");
+        res.status(200).json({
+            message: "musics fetched successfully",
+            musics: musics
+        })
+    } catch (error) {
+        res.status(409).json({ message: error })
+    }
+}
+
+module.exports = { createMusic, createAlbum, getAllMusics };
